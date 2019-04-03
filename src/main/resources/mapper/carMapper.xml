@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace 对应接口的全限定名-->
+<mapper namespace="com.example.demo.dao.ShopCarDao">
+   
+    
+	<!--购物车添加商品-->
+	<insert id="addItem">
+        insert into car values(null,#{id},#{productId},#{num},#{totlePrice},#{isCheck})
+    </insert>
+    
+    <select id="selItem" resultMap="carResultMap">
+        select CARID ,ID,PID,NUM,TOTIE,ISCHECK
+            from car
+            where ID = #{id} and PID = #{productId}
+    </select>
+	
+	<select id="sel" resultMap="carResultMap">
+        select CARID,ID,PID,NUM,TOTIE
+            from car
+            where ID = #{id}
+    </select>
+	
+	<select id="selById" resultMap="carResultMap">
+        select PID 
+            from car
+            where ID = #{id}
+    </select>
+     <resultMap  id="carResultMap" type="com.example.demo.entity.ShoppingCar">
+    	 <result column="CARID" property="carId"/>
+    	 <result column="ID" property="id"/>
+    	 <result column="PID" property="productId"/>
+    	 <result column="NUM" property="num"/>
+    	 <result column="TOTIE" property="productPrice"/>
+    	 <result column="ISCHECK" property="isCheck"/>
+    </resultMap>
+    
+    <update id="editcheck">
+        update car
+        <trim prefix="set" suffixOverrides=",">
+            <if test="isCheck != null">ISCHECK = #{isCheck}</if>
+        </trim>
+        where ID = #{id} and PID = #{productId}
+    </update>
+    
+     <update id="editNum">
+        update car
+        <trim prefix="set" suffixOverrides=",">
+            <if test="num != null">NUM = #{num}</if>
+        </trim>
+        where ID = #{id} and PID = #{productId}
+    </update>
+    
+     <delete id="delItem">
+        delete from car where ID = #{id} and ISCHECK=1
+    </delete>
+</mapper>
